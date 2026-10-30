@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'animations.dart';
 import 'responsive.dart';
 
 const Color _crimson = Color(0xFFB4030C);
@@ -194,7 +195,7 @@ class _Canvas extends StatelessWidget {
         Positioned(
           left: r.dp(13),
           top: r.dp(675.6),
-          child: GestureDetector(
+          child: BouncyButton(
             onTap: onBack,
             behavior: HitTestBehavior.opaque,
             child: Padding(
@@ -220,7 +221,7 @@ class _Canvas extends StatelessWidget {
         Positioned(
           left: r.dp(206),
           top: r.dp(660),
-          child: GestureDetector(
+          child: BouncyButton(
             onTap: onNext,
             child: Container(
               width: r.dp(163),
@@ -257,7 +258,7 @@ class _Canvas extends StatelessWidget {
 }
 
 /// Model photo with its edges and stray reference marks faded out so it
-/// blends into the painted background.
+/// Model photo with its bottom edge faded out so it blends behind the product cards.
 class _ModelPhoto extends StatelessWidget {
   const _ModelPhoto();
 
@@ -266,32 +267,17 @@ class _ModelPhoto extends StatelessWidget {
     return IgnorePointer(
       child: ShaderMask(
         blendMode: BlendMode.dstIn,
-        shaderCallback: (rect) => const RadialGradient(
-          center: Alignment(-0.91, -0.735),
-          radius: 0.16,
-          colors: [Colors.transparent, Colors.transparent, Colors.white],
-          stops: [0, 0.75, 1],
+        shaderCallback: (rect) => const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.white, Colors.white, Colors.transparent],
+          stops: [0.0, 0.90, 1.0],
         ).createShader(rect),
-        child: ShaderMask(
-          blendMode: BlendMode.dstIn,
-          shaderCallback: (rect) => const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.transparent, Colors.white],
-            stops: [0.03, 0.065],
-          ).createShader(rect),
-          child: ShaderMask(
-            blendMode: BlendMode.dstIn,
-            shaderCallback: (rect) => const LinearGradient(
-              colors: [Colors.transparent, Colors.white],
-              stops: [0, 0.07],
-            ).createShader(rect),
-            child: Image.asset(
-              'assets/images/style-more-model.png',
-              fit: BoxFit.fill,
-              filterQuality: FilterQuality.medium,
-            ),
-          ),
+        child: Image.asset(
+          'assets/images/style-more-model.png',
+          fit: BoxFit.contain,
+          alignment: Alignment.topCenter,
+          filterQuality: FilterQuality.high,
         ),
       ),
     );
@@ -433,7 +419,9 @@ class _ProductCard extends StatelessWidget {
               top: r.dp(20 - 7.5),
               width: r.dp(16),
               height: r.dp(15),
-              child: CustomPaint(painter: _CardHeartPainter(r)),
+              child: PulsingHeart(
+                child: CustomPaint(painter: _CardHeartPainter(r)),
+              ),
             ),
             Positioned(
               left: 0,

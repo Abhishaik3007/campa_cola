@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'animations.dart';
 import 'get_started_1.dart';
 import 'get_started_2.dart';
 import 'get_started_3.dart';
@@ -17,19 +18,6 @@ const Color inkSecondary = Color(0xFF635A5C); // Muted descriptive text
 const Color badgeBg = Color(0xFFFDE4E0); // Soft circle icon badge
 const Color dotInactive = Color(0xFFF1CECA); // Inactive indicator dot
 const Color screenOneBg = Color(0xFFFEEAE9); // First-screen blush field
-
-/// Blocks finger swipes. Button calls to [PageController.jumpToPage] still work.
-class _NoSwipePhysics extends ScrollPhysics {
-  const _NoSwipePhysics({super.parent});
-
-  @override
-  _NoSwipePhysics applyTo(ScrollPhysics? ancestor) {
-    return _NoSwipePhysics(parent: buildParent(ancestor));
-  }
-
-  @override
-  bool shouldAcceptUserOffset(ScrollMetrics position) => false;
-}
 
 class CampusClosetApp extends StatelessWidget {
   const CampusClosetApp({super.key});
@@ -58,8 +46,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void _goTo(int page) {
     if (!_pageController.hasClients) return;
-    _pageController.jumpToPage(page);
-    setState(() => _currentIndex = page);
+    _pageController.animateToPage(
+      page,
+      duration: const Duration(milliseconds: 380),
+      curve: Curves.easeInOutCubic,
+    );
   }
 
   @override
@@ -110,7 +101,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   child: PageView(
                     controller: _pageController,
                     onPageChanged: (i) => setState(() => _currentIndex = i),
-                    physics: const _NoSwipePhysics(),
+                    physics: const BouncingScrollPhysics(),
                     children: [
                       GetStarted1(
                         onNext: () => _goTo(1),
@@ -136,7 +127,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               top: MediaQuery.sizeOf(context).width * (73 / 384),
               width: MediaQuery.sizeOf(context).width * (54 / 384),
               height: MediaQuery.sizeOf(context).width * (54 / 384),
-              child: const IgnorePointer(child: GetStarted2Heart()),
+              child: const IgnorePointer(
+                child: PulsingHeart(child: GetStarted2Heart()),
+              ),
             ),
         ],
       ),

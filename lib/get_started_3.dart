@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'animations.dart';
 import 'responsive.dart';
 
 const Color _crimson = Color(0xFFA20314);
@@ -132,13 +133,13 @@ class _Canvas extends StatelessWidget {
         Positioned(
           left: 0,
           top: r.dp(173.9),
-          width: r.dp(236.2),
+          width: r.dp(237.0),
           height: r.dp(504.8),
           child: IgnorePointer(
             child: Image.asset(
-              'assets/images/second-life-model.png',
-              fit: BoxFit.fill,
-              filterQuality: FilterQuality.medium,
+              'assets/images/Get_started_3.png',
+              fit: BoxFit.contain,
+              filterQuality: FilterQuality.high,
             ),
           ),
         ),
@@ -217,7 +218,7 @@ class _Canvas extends StatelessWidget {
         Positioned(
           left: r.dp(18),
           top: r.dp(687),
-          child: GestureDetector(
+          child: BouncyButton(
             onTap: onBack,
             behavior: HitTestBehavior.opaque,
             child: Padding(
@@ -243,7 +244,7 @@ class _Canvas extends StatelessWidget {
         Positioned(
           left: r.dp(189),
           top: r.dp(671.5),
-          child: GestureDetector(
+          child: BouncyButton(
             onTap: onGetStarted,
             child: Container(
               width: r.dp(178),

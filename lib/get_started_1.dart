@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'animations.dart';
 import 'responsive.dart';
 
 const Color _crimson = Color(0xFFB40008);
@@ -126,14 +127,6 @@ class _Canvas extends StatelessWidget {
         ),
 
         // Doodles around the headline and subtitle
-        _Marks(
-          r: r,
-          lines: const [
-            [Offset(278.7, 37.5), Offset(291.0, 13.5)],
-            [Offset(285.3, 48.4), Offset(310.0, 23.1)],
-            [Offset(296.2, 54.0), Offset(310.0, 49.2)],
-          ],
-        ),
         _Heart(
           r: r,
           rect: const Rect.fromLTWH(328.8, 59.3, 35, 45.7),
@@ -142,7 +135,7 @@ class _Canvas extends StatelessWidget {
         ),
         _Heart(
           r: r,
-          rect: const Rect.fromLTWH(263, 216, 33, 43),
+          rect: const Rect.fromLTWH(330, 238, 33, 43),
           color: _doodleRed,
           angle: -0.12,
         ),
@@ -158,20 +151,15 @@ class _Canvas extends StatelessWidget {
           ],
           color: _doodlePink,
         ),
+        // 4-point sparkle star to the left of the middle polaroid
+        _Sparkle(r: r, rect: const Rect.fromLTWH(55.7, 305.7, 26.5, 34)),
+        // Burst marks above the right polaroid
         _Marks(
           r: r,
           lines: const [
-            [Offset(63.0, 288.0), Offset(85.5, 301.0)],
-            [Offset(72.0, 271.0), Offset(93.4, 292.0)],
-            [Offset(93.4, 264.6), Offset(102.3, 288.0)],
-          ],
-        ),
-        _Sparkle(r: r, rect: const Rect.fromLTWH(325, 309, 26.5, 34)),
-        _Marks(
-          r: r,
-          lines: const [
-            [Offset(349.0, 379.0), Offset(361.0, 363.0)],
-            [Offset(356.8, 388.0), Offset(373.6, 376.0)],
+            [Offset(335.0, 362.0), Offset(347.0, 347.0)],
+            [Offset(343.0, 371.0), Offset(359.0, 356.0)],
+            [Offset(353.0, 381.0), Offset(371.0, 369.0)],
           ],
         ),
 
@@ -182,11 +170,16 @@ class _Canvas extends StatelessWidget {
           width: 175,
           height: 232,
           angle: 0.155,
-          asset: 'assets/images/collage-center-cut.png',
-          view: const Rect.fromLTWH(258, 8, 506.53, 660),
+          asset: 'assets/images/middle.jpg',
+          sourceSize: const Size(1920, 1280),
+          view: const Rect.fromLTWH(780, 20, 921, 1200),
           tapeDx: 0.445,
           tapeSize: const Size(43, 18),
           tapeAngle: -0.03,
+          phaseShift: 0.35,
+          maxDy: 3.5,
+          maxAngleSway: -0.015,
+          duration: const Duration(milliseconds: 3800),
         ),
         _Polaroid(
           r: r,
@@ -194,11 +187,16 @@ class _Canvas extends StatelessWidget {
           width: 139,
           height: 202.5,
           angle: -0.286,
-          asset: 'assets/images/collage-left-cut.png',
-          view: const Rect.fromLTWH(420, 0, 471.3, 682),
+          asset: 'assets/images/left.png',
+          sourceSize: const Size(1024, 1536),
+          view: const Rect.fromLTWH(495, 125, 504.5, 730),
           tapeDx: 0.5,
           tapeSize: const Size(34, 16),
           tapeAngle: 0.04,
+          phaseShift: 0.0,
+          maxDy: 4.8,
+          maxAngleSway: 0.024,
+          duration: const Duration(milliseconds: 3200),
         ),
         _Polaroid(
           r: r,
@@ -206,37 +204,38 @@ class _Canvas extends StatelessWidget {
           width: 134,
           height: 193,
           angle: 0.31,
-          asset: 'assets/images/collage-right-cut.png',
-          view: const Rect.fromLTWH(468, 150, 372.31, 532),
+          asset: 'assets/images/right.jpg',
+          sourceSize: const Size(1920, 1280),
+          view: const Rect.fromLTWH(878, 281, 698, 998),
           tapeDx: 0.42,
           tapeSize: const Size(34, 16),
           tapeAngle: -0.04,
+          phaseShift: 0.70,
+          maxDy: 4.2,
+          maxAngleSway: -0.020,
+          duration: const Duration(milliseconds: 3500),
         ),
 
-        // Doodles drawn over and below the collage
+        // Doodles drawn over the collage
+        // Left polaroid left border red heart
         _Heart(
           r: r,
           rect: const Rect.fromLTWH(20, 421, 18, 22),
           color: _doodleRed,
           angle: -0.2,
         ),
+        // Left polaroid bottom-right pink heart
         _Heart(
           r: r,
-          rect: const Rect.fromLTWH(184.7, 514, 24, 30),
-          color: _doodleRed,
+          rect: const Rect.fromLTWH(180, 514, 22, 28),
+          color: _doodlePink,
           angle: 0.08,
         ),
-        _Squiggle(
+        // Right polaroid bottom-right accented heart
+        _AccentedHeart(
           r: r,
-          points: const [
-            Offset(132, 597),
-            Offset(172, 578),
-            Offset(181, 589),
-            Offset(190, 577),
-            Offset(198, 590),
-            Offset(246, 588),
-          ],
-          color: _doodlePink,
+          rect: const Rect.fromLTWH(344, 526, 32, 38),
+          angle: 0.12,
         ),
 
         // Page indicator
@@ -258,7 +257,7 @@ class _Canvas extends StatelessWidget {
         Positioned(
           left: r.dp(17),
           top: r.dp(653.6),
-          child: GestureDetector(
+          child: BouncyButton(
             onTap: onSkip,
             behavior: HitTestBehavior.opaque,
             child: Padding(
@@ -283,7 +282,7 @@ class _Canvas extends StatelessWidget {
         Positioned(
           left: r.dp(202),
           top: r.dp(643),
-          child: GestureDetector(
+          child: BouncyButton(
             onTap: onNext,
             child: Container(
               width: r.dp(165.5),
@@ -326,12 +325,18 @@ class _Polaroid extends StatelessWidget {
   final double height;
   final double angle;
   final String asset;
+  final Size sourceSize;
 
   /// Window into the original photo, in source pixels. The file is not edited.
   final Rect view;
   final double tapeDx;
   final Size tapeSize;
   final double tapeAngle;
+
+  final double phaseShift;
+  final double maxDy;
+  final double maxAngleSway;
+  final Duration duration;
 
   const _Polaroid({
     required this.r,
@@ -340,10 +345,15 @@ class _Polaroid extends StatelessWidget {
     required this.height,
     required this.angle,
     required this.asset,
+    required this.sourceSize,
     required this.view,
     required this.tapeDx,
     required this.tapeSize,
     required this.tapeAngle,
+    this.phaseShift = 0.0,
+    this.maxDy = 4.0,
+    this.maxAngleSway = 0.02,
+    this.duration = const Duration(milliseconds: 3400),
   });
 
   @override
@@ -360,9 +370,14 @@ class _Polaroid extends StatelessWidget {
       top: r.dp(center.dy) - h / 2,
       width: w,
       height: h,
-      child: Transform.rotate(
-        angle: angle,
-        child: Stack(
+      child: FloatingPolaroid(
+        phaseShift: phaseShift,
+        maxDy: r.dp(maxDy),
+        maxAngle: maxAngleSway,
+        duration: duration,
+        child: Transform.rotate(
+          angle: angle,
+          child: Stack(
           clipBehavior: Clip.none,
           children: [
             Positioned.fill(
@@ -398,8 +413,8 @@ class _Polaroid extends StatelessWidget {
                           offset: Offset(-view.left * scale, -view.top * scale),
                           child: Image.asset(
                             asset,
-                            width: 1024 * scale,
-                            height: 682 * scale,
+                            width: sourceSize.width * scale,
+                            height: sourceSize.height * scale,
                             fit: BoxFit.fill,
                             filterQuality: FilterQuality.high,
                           ),
@@ -415,11 +430,19 @@ class _Polaroid extends StatelessWidget {
               top: -tapeH * 0.55,
               child: Transform.rotate(
                 angle: tapeAngle,
-                child: Container(width: tapeW, height: tapeH, color: _tape),
+                child: Container(
+                  width: tapeW,
+                  height: tapeH,
+                  decoration: BoxDecoration(
+                    color: _tape,
+                    borderRadius: BorderRadius.circular(r.dp(1.0)),
+                  ),
+                ),
               ),
             ),
           ],
         ),
+      ),
       ),
     );
   }
@@ -479,9 +502,11 @@ class _Heart extends StatelessWidget {
     return Positioned.fromRect(
       rect: r.box(rect),
       child: IgnorePointer(
-        child: Transform.rotate(
-          angle: angle,
-          child: CustomPaint(painter: _HeartPainter(r, color)),
+        child: PulsingHeart(
+          child: Transform.rotate(
+            angle: angle,
+            child: CustomPaint(painter: _HeartPainter(r, color)),
+          ),
         ),
       ),
     );
@@ -522,6 +547,79 @@ class _HeartPainter extends CustomPainter {
       oldDelegate.color != color || oldDelegate.r.scale != r.scale;
 }
 
+class _AccentedHeart extends StatelessWidget {
+  final Responsive r;
+  final Rect rect;
+  final double angle;
+  const _AccentedHeart({
+    required this.r,
+    required this.rect,
+    this.angle = 0,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned.fromRect(
+      rect: r.box(rect),
+      child: IgnorePointer(
+        child: PulsingHeart(
+          duration: const Duration(milliseconds: 2200),
+          child: Transform.rotate(
+            angle: angle,
+            child: CustomPaint(painter: _AccentedHeartPainter(r)),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _AccentedHeartPainter extends CustomPainter {
+  final Responsive r;
+  _AccentedHeartPainter(this.r);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final w = size.width;
+    final h = size.height;
+
+    // Outer pink heart outline
+    final outerPaint = Paint()
+      ..color = _doodlePink
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = r.dp(2.4)
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+
+    final outerPath = Path()
+      ..moveTo(w * 0.50, h * 0.30)
+      ..cubicTo(w * 0.40, h * 0.04, w * 0.04, h * 0.06, w * 0.06, h * 0.36)
+      ..cubicTo(w * 0.08, h * 0.60, w * 0.38, h * 0.80, w * 0.52, h * 0.98)
+      ..moveTo(w * 0.50, h * 0.30)
+      ..cubicTo(w * 0.60, h * 0.04, w * 0.96, h * 0.06, w * 0.94, h * 0.36)
+      ..cubicTo(w * 0.92, h * 0.60, w * 0.62, h * 0.80, w * 0.48, h * 0.96);
+    canvas.drawPath(outerPath, outerPaint);
+
+    // Inner red accent tick / V mark
+    final innerPaint = Paint()
+      ..color = _doodleRed
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = r.dp(2.2)
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+
+    final innerPath = Path()
+      ..moveTo(w * 0.38, h * 0.42)
+      ..lineTo(w * 0.48, h * 0.78)
+      ..lineTo(w * 0.62, h * 0.48);
+    canvas.drawPath(innerPath, innerPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _AccentedHeartPainter oldDelegate) =>
+      oldDelegate.r.scale != r.scale;
+}
+
 class _Sparkle extends StatelessWidget {
   final Responsive r;
   final Rect rect;
@@ -531,7 +629,11 @@ class _Sparkle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned.fromRect(
       rect: r.box(rect),
-      child: IgnorePointer(child: CustomPaint(painter: _SparklePainter(r))),
+      child: IgnorePointer(
+        child: TwinklingSparkle(
+          child: CustomPaint(painter: _SparklePainter(r)),
+        ),
+      ),
     );
   }
 }
